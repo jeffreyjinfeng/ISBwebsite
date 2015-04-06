@@ -1,0 +1,29 @@
+<!------------------------------- Error ID refrence ------------------ >
+<!--      ID		Error
+--------------------------------------------------------------------------------------
+Account creation
+--------------------------------------------------------------------------------------				
+	  1		This email already exists		
+          2		Password Mismath			
+          3		We couldn`t find the information you are seeking in our database --------------------------------------------------------------------------------------
+Customer Login
+--------------------------------------------------------------------------------------	 		  4		Please check your email and password
+--------------------------------------------------------------------------------------
+Update Profile
+--------------------------------------------------------------------------------------	 		  5		Your profile is updated sucessfully
+--------------------------------------------------------------------------------------
+Manage Accounts
+--------------------------------------------------------------------------------------	 		  6		A request to activate your Checking and savings accounts has been submitted
+			You can use your accounts once your accounts once it has been activated.
+--------------------------------------------------------------------------------------
+Fund Transfer
+--------------------------------------------------------------------------------------	 		  7		The requested amount has been sucessfully trasferred.
+	  8 		We were unable to process your transfer request due to low balance.
+	  9 		We were unable to process your transfer request, please check the information you entered.
+--------------------------------------------------------------------------------------
+Create Account for customer
+--------------------------------------------------------------------------------------	 		  10		A Checking account has been sucessfully created.
+	  11		A Savings account has been sucessfully created.
+	  12 		The system was unable to create an account please check the input field.
+	  13		This account has been already created  
+<!-------------------------------------------------------------------- >

@@ -1,0 +1,196 @@
+-- Database Interstellar Bank "isb" 
+-- phpMyAdmin SQL
+-- version 4.0.9
+-- http://www.phpmyadmin.net
+--
+-- Priyanka (1st version), Pierre, David Y (current version, edited)
+-- Generation Time: Mar 21, 2014 at 11:15 PM
+-- Server version: 5.6.14
+-- PHP Version: 5.5.6
+
+
+
+--
+-- Database: `isb`
+--
+ 
+DROP Database IF EXISTS  isb;
+Create Schema IF NOT EXISTS isb;
+
+Use isb;
+
+--
+-- Table structure for table `userroleid`
+--
+
+CREATE TABLE IF NOT EXISTS `UserRoleId` (
+  `UserId` int(5) NOT NULL AUTO_INCREMENT,
+  `UserAccessLevel` int(5),
+  `FirstLoginDate` datetime,
+  `LastLoginDate` datetime,
+  `LoginPassword` varchar(15)  ,
+  `UserRoleDescription` varchar(30),
+  PRIMARY KEY (`UserId`)
+) ENGINE=InnoDB ;
+
+-- ----------------------------------------------------------------------------------------------------
+
+
+
+--
+-- Table structure for table `customer`
+--
+
+-- --------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `customer` (
+  `CustomerId` int(20) NOT NULL AUTO_INCREMENT,
+  `CustomerFirstName` varchar(30),
+  `CustomerMiddleName` varchar(30) ,
+  `CustomerLastName` varchar(30)  ,
+  `PhoneHome` int(14)  ,
+  `PhoneMobile1` int(14)  ,
+  `PhoneInternational` int(14)  ,
+  `EmailId` varchar(40)  ,
+  `LastDateModified` datetime,
+  `DOB` date NOT NULL,
+  `UserId` int(5) NOT NULL,
+  `SSN` int(9) NOT NULL,
+  PRIMARY KEY (`CustomerId`),
+  FOREIGN KEY (`UserId`) REFERENCES `UserRoleId`(`UserId`) 
+
+) ENGINE=InnoDB ;
+
+-- --------------------------------------------------------
+--
+-- Table structure for table `addresses`
+--
+
+CREATE TABLE IF NOT EXISTS `addresses` (
+  `AddressId` int(20) NOT NULL AUTO_INCREMENT,
+  `AddressType` varchar(10)  ,
+  `AddressLine1` varchar(40)  ,
+  `AddressLine2` varchar(40)  ,
+  `City` varchar(20)  ,
+  `Zipcode` int(6)  ,
+  `StateCode` varchar(2)  ,
+  `Country` varchar(20)  ,
+  PRIMARY KEY (`AddressId`)
+) ENGINE=InnoDB ;
+
+
+-- --------------------------------------------------------
+
+
+--
+-- Table structure for table `employee`
+--
+
+CREATE TABLE IF NOT EXISTS `employee` (
+  `EmployeeId` int(20) NOT NULL AUTO_INCREMENT,
+  `EmployeeFirstName` varchar(30),
+  `EmployeeMiddleName` varchar(20),
+  `EmployeeLastName` varchar(30),
+  `EmailId` varchar(40),
+  `UserId` int(5) NOT NULL,
+  `LastDateModified` datetime ,
+  PRIMARY KEY (`EmployeeId`),
+  FOREIGN KEY (`UserId`) REFERENCES `UserRoleId`(UserId) 
+
+) ENGINE=InnoDB ;
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `generalrequests`
+--
+
+CREATE TABLE IF NOT EXISTS `generalrequests` (
+  `RequestId` int(20) NOT NULL AUTO_INCREMENT,
+  `CustomerId` int(20)  ,
+  `EmployeeId` int(20)  ,
+  `RequestTypeId` int(20)  ,
+  `IsPriority` int(1)  ,
+  `UserComment` varchar(225)  ,
+  PRIMARY KEY (`RequestId`),
+  FOREIGN KEY (`CustomerId`) REFERENCES `Customer`(`CustomerId`),
+  FOREIGN KEY (`EmployeeId`) REFERENCES `Employee`(`EmployeeId`)
+) ENGINE=InnoDB;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `account`
+--
+
+CREATE TABLE IF NOT EXISTS `account` (
+  `AccountId` int(20) NOT NULL AUTO_INCREMENT,
+  `CustomerId` int(20)  ,
+  `AccountType` varchar(10)  ,
+  `CurrentBalance` decimal(9,2)  ,
+  `LastModifiedDateTime` datetime  ,
+  `OpenedDate` datetime  ,
+  `ClosedDate` datetime  ,
+  PRIMARY KEY (`AccountId`),
+  FOREIGN KEY (`CustomerId`) REFERENCES `Customer`(`CustomerId`) 
+) ENGINE=InnoDB ;
+
+
+-- ----------------------------------------------------------------
+
+--
+-- Table structure for table `transactions`
+--
+
+CREATE TABLE IF NOT EXISTS `transactions` (
+  `TransactionId` int(20) NOT NULL AUTO_INCREMENT,
+  `AccountId` int(20)  ,
+  `TransactionDate` datetime  ,
+  `TransactionDetail` varchar(50)  ,
+  `TransactionType` varchar(6)  ,
+  `Amount` decimal(9,2)  ,
+  `TransactionStatus` int(1)  ,
+  PRIMARY KEY (`TransactionId`),
+  FOREIGN KEY (`AccountId`) REFERENCES `Account`(`AccountId`) 
+) ENGINE=InnoDB ;
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `transactionsjournal`
+--
+
+CREATE TABLE IF NOT EXISTS `transactionsjournal` (
+  `TransactionId` int(20) NOT NULL,
+  `AccountId` int(20)  ,
+  `TransactionDate` datetime  ,
+  `JournalDate` date  ,
+  `TransactionDetail` varchar(50) NOT NULL,
+  `TransactionType` varchar(6)  ,
+  `Amount` decimal(9,2)  ,
+  `TransactionStatus` int(1)  ,
+  PRIMARY KEY (`TransactionId`),
+  FOREIGN KEY (`AccountId`) REFERENCES `Account`(`AccountId`) 
+) ENGINE=InnoDB ;
+
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `cust_addr`
+--
+
+CREATE TABLE IF NOT EXISTS `cust_addr` (
+  `CustomerID` int(20) NOT NULL DEFAULT 0,
+  `AddressID` int(20) NOT NULL DEFAULT 0,
+  FOREIGN KEY (`AddressID`) REFERENCES `Addresses`(`AddressID`),
+  FOREIGN KEY (`CustomerID`) REFERENCES `Customer`(`CustomerID`) 
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS `empl_addr` (
+  `EmployeeID` int(20) NOT NULL,
+  `AddressId` int(20) NOT NULL,
+   FOREIGN KEY (`EmployeeID`) REFERENCES `Employee`(`EmployeeID`),
+   FOREIGN KEY (`AddressID`) REFERENCES `Addresses`(`AddressID`)  
+) ENGINE=InnoDB;
